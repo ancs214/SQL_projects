@@ -1,0 +1,8 @@
+SELECT DISTINCT Customers.CustomerId, FirstName, LastName, StoreName
+FROM Orders 
+JOIN Customers
+ON Customers.CustomerId = Orders.CustomerId
+JOIN Stores
+ON Stores.StoreId = Orders.StoreId
+WHERE StoreName = 'Love You Latte North'
+ORDER BY LastName, FirstName

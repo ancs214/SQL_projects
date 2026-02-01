@@ -1,0 +1,12 @@
+SELECT TOP 1 OrderProductId,
+             OrderProducts.OrderId,
+             OrderProducts.ProductId,
+             Quantity,
+             ProductName
+FROM OrderProducts
+JOIN Products ON OrderProducts.ProductId = Products.ProductId
+JOIN Orders ON Orders.OrderID = OrderProducts.OrderId
+JOIN Customers ON Customers.CustomerId = Orders.CustomerId
+WHERE FirstName = 'William'
+  AND LastName = 'Jones'
+ORDER BY Orders.OrderDate DESC;
