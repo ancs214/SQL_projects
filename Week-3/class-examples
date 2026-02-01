@@ -1,0 +1,9 @@
+SELECT *
+FROM Products
+WHERE ProductDescription LIKE '%coffee%' OR ProductDescription LIKE '%latte%'
+
+SELECT *,
+Tax/Total AS TaxRate
+FROM Orders
+WHERE TaxRate > 0.02 AND PaymentType = 'Credit'
+ORDER BY TaxRate DESC
