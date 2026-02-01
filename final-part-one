@@ -1,0 +1,33 @@
+CREATE VIEW OrdersByStore AS
+
+WITH TotalByStore AS (
+SELECT 
+	StoreName,
+	OrderId, 
+	CustomerId,
+	BaristaId,
+	CAST(OrderDate AS DATE) AS OrderDate,
+	PaymentType,
+	PaymentAmount,
+	Tax,
+	Total,
+	ROW_NUMBER() OVER (
+		PARTITION BY StoreName
+		ORDER BY Total DESC
+	) AS TotalsRank
+FROM Orders o
+JOIN Stores s ON o.StoreId = s.StoreId
+)
+
+SELECT 
+	StoreName,
+	OrderId, 
+	CustomerId,
+	BaristaId,
+	CAST(OrderDate AS DATE) AS OrderDate,
+	PaymentType,
+	PaymentAmount,
+	Tax,
+	Total
+FROM TotalByStore 
+WHERE TotalsRank < 4
