@@ -1,0 +1,8 @@
+CREATE VIEW ProductsWithoutSales AS (
+SELECT 
+	ProductName,
+	ProductDescription
+FROM Products p
+FULL OUTER JOIN OrderProducts op ON p.ProductId = op.ProductId
+WHERE Quantity IS NULL OR Quantity = '0'
+)

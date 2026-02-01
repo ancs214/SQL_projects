@@ -1,0 +1,21 @@
+WITH CustomersRanked AS (
+SELECT 
+	CustomerName,
+	StoreName,
+	TotalSales,
+	QuantitySold,
+	ROW_NUMBER() OVER (
+		PARTITION BY StoreName
+		ORDER BY TotalSales DESC
+	) AS Rank
+FROM SalesByCustomerByStoreByProduct
+)
+
+SELECT 
+	CustomerName,
+	StoreName,
+	TotalSales,
+	QuantitySold
+FROM CustomersRanked
+WHERE Rank < 4
+ORDER BY StoreName, TotalSales

@@ -1,0 +1,25 @@
+CREATE VIEW SalesByBaristaByStoreByProduct AS (
+SELECT 
+	CONCAT(FirstName, ' ', LastName) AS BaristaName,
+	CASE	
+		WHEN StoreName = 'Love You Latte West' THEN 'West'
+		WHEN StoreName = 'Love You Latte North' THEN 'North'
+		WHEN StoreName = 'Love You Latte East' THEN 'East'
+		ELSE 'Other'
+	END AS StoreLocation,
+	CASE	
+		WHEN ProductName LIKE '%Americano%' THEN 'Americano'
+		ELSE ProductName
+	END AS Product,
+	SUM(Total) AS TotalSales
+FROM Barista b
+JOIN Orders o ON b.BaristaId = o.BaristaId
+JOIN Stores s ON o.StoreId = s.StoreId
+JOIN OrderProducts op ON o.OrderId = op.OrderId
+JOIN Products p ON op.ProductId = p.ProductId
+WHERE StoreName = 'Love You Latte West' 
+	OR StoreName = 'Love You Latte North' 
+	OR CONCAT(FirstName, ' ', LastName) = 'Michael Breach'
+	OR CONCAT(FirstName, ' ', LastName) = 'Lee Kagbin'
+GROUP BY CONCAT(FirstName, ' ', LastName), ProductName, StoreName 
+)

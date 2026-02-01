@@ -1,0 +1,16 @@
+CREATE VIEW SalesByCustomerByStoreByProduct AS (
+SELECT 
+	CONCAT(c.FirstName, ' ', c.LastName) AS CustomerName,
+	s.StoreName,
+	ProductName,
+	SUM(op.Quantity) AS QuantitySold,
+	SUM(o.Total) AS TotalSales
+FROM Orders o
+JOIN Stores s ON o.StoreId = s.StoreId
+JOIN Customers c ON o.CustomerId = c.CustomerId
+JOIN OrderProducts op ON o.OrderId = op.OrderId
+JOIN Products p ON op.ProductId = p.ProductId
+GROUP BY FirstName, LastName, s.StoreName, p.ProductName
+)
+
+
