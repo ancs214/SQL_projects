@@ -1,16 +1,27 @@
+/*
+In SQL, a View does not store data physically but rather displays data dynamically 
+from one or more underlying tables when it is queried. Instead of running this 
+complex logic every time you need the data, this saves the query as a "virtual table." 
+You can now simply run SELECT * FROM OrdersByStore to see the results.
+*/
+
 CREATE VIEW OrdersByStore AS
 
+--TotalByStore is a CTE (Common Table Expression)
 WITH TotalByStore AS (
 SELECT 
 	StoreName,
 	OrderId, 
 	CustomerId,
 	BaristaId,
+	--cast strips away hours/minutes to just show the date
 	CAST(OrderDate AS DATE) AS OrderDate,
 	PaymentType,
 	PaymentAmount,
 	Tax,
 	Total,
+	--ranking logic: creates a counter that resets for every store. 
+	--looks at Total and assigns rank "1" to most expensive, "2" second most expensive, etc
 	ROW_NUMBER() OVER (
 		PARTITION BY StoreName
 		ORDER BY Total DESC
@@ -19,6 +30,8 @@ FROM Orders o
 JOIN Stores s ON o.StoreId = s.StoreId
 )
 
+--pulls data from CTE, however also adds a filter WHERE TotalsRank < 4
+--By doing this, it throws away everything except the Top 3 orders per store.
 SELECT 
 	StoreName,
 	OrderId, 
