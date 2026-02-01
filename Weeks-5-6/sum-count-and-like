@@ -1,0 +1,23 @@
+WITH BaristaHighSales AS (
+    SELECT 
+        b.BaristaId,
+        COUNT(OrderId) AS OrderCount
+    FROM Barista b
+    JOIN Orders o ON o.BaristaId = b.BaristaId
+    WHERE OrderDate LIKE '%2024%'
+    GROUP BY b.BaristaId
+    HAVING COUNT(OrderId) >= 45 
+)
+
+SELECT 
+    StoreName,
+    FirstName,
+    LastName,
+    SUM(PaymentAmount) AS TotalPaid,
+    COUNT(OrderId) AS OrderCount
+FROM BaristaHighSales bhs
+JOIN Orders o ON bhs.BaristaId = o.BaristaId
+JOIN Stores s ON o.StoreId = s.StoreId
+JOIN Barista b ON o.BaristaId = b.BaristaId
+GROUP BY StoreName, FirstName, LastName 
+ORDER BY TotalPaid DESC

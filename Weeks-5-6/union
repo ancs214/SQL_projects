@@ -1,0 +1,15 @@
+SELECT DISTINCT 
+	StoreName,
+	FirstName,
+	LastName
+FROM Orders
+JOIN Stores ON Stores.StoreId = Orders.StoreId
+JOIN Barista ON Barista.BaristaId = Orders.BaristaId
+
+UNION
+
+SELECT 
+	StoreName,
+	Manager,
+	'Manager'
+FROM Stores
